@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--Meta-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!--General-->
+  <title>Alculator</title>
+  <!--CDNs-->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400" rel="stylesheet">
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+<!--------------------------------------------------->
+<!--------------------------------------------------->
+    <!--STYLING-->
+    <style>
+    /*Colours*/
+          :root {
+            --primary: #3170FB;
+            --secondary: #39EE81;
+            --base: white;
+          }
+/*General Styling*/
+
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: 'Poppins', 'sans-serif';
+        color:var(--base);
+      }
+
+      body {
+        background-image: linear-gradient(to right, var(--primary) , var(--secondary));
+      }
+
+      h1 {
+        font-size: 50px;
+      }
+
+/*Container*/
+      .container-full {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        align-items: center;
+      }
+
+      .container {
+        width: 90%;
+        height: auto;
+        margin: auto;
+
+      }
+/*Welcome Section*/
+
+      .welcome {
+        padding-bottom: 5%;
+      }
+
+/*User Input*/
+      .input-template {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media only screen and (max-width: 715px) {
+        .input-template {
+          grid-template-columns: none;
+        }
+
+        .input-1 {
+          display: block;
+        }
+
+        .input-2 {
+          display: block;
+        }
+
+        .input-3 {
+          display: block;
+        }
+
+       }
+
+/*Forms*/
+
+        input[type=number] {
+          border: solid var(--base) 2px;
+          width: 200px;
+          height: 30px;
+          border-radius: 50px;
+          background: rgba(255,255,255, 0.6);
+          text-align: center;
+          font-size: 20px;
+        }
+
+        button {
+          border: solid white 2px;
+          width: 150px;
+          height: 30px;
+          border-radius: 50px;
+          background: white;
+          text-align: center;
+          color: var(--primary);
+          font-size: 20px;
+          margin-top: 5%;
+        }
+
+/*Result*/
+
+      .inline-text {
+        display: inline-block;
+      }
+
+      #result {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .result {
+        position: fixed;
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--primary);
+        text-align: center;
+        z-index: 10;
+        align-items: center;
+      }
+
+      #error {
+        color: white;
+      }
+
+/*Footer*/
+    .footer {
+      text-align: center;
+      padding: 2%;
+      background-color: var(--base);
+    }
+
+    </style>
+<!--------------------------------------------------->
+<!--------------------------------------------------->
+</head>
+<body>
+<!--------------------------------------------------->
+<!--------------------------------------------------->
+  <script>
+  //hide result section on load
+  $(document).ready(function(){
+    $(".result").hide();
+
+    $(".result-close").click( function(){
+      $(".result").hide();
+    });
+  });
+
+  </script>
+  <script type="text/javascript">
+
+    //calculates ml of alcohol per pound based on user inputs
+    function alculate() {
+      //clear the error section if it contains any errors
+      //this is for repeat use of the app
+      document.getElementById('error').innerHTML = "";
+
+      //get variables from user input
+      var drinkml = document.getElementById('drinkml').value;
+      var alcper = document.getElementById('alcper').value;
+      var price = document.getElementById('price').value;
+
+      //set up error messages
+      var infErr = 'Error: We don&#39;t know how you found an endless stream of alcohol, but you should make the most it!';
+      var nanErr = 'Error: You seem to have missed some inputs, maybe it&#39;s time for a glass of water?';
+      var zerErr = 'Error: That drink has no alcohol. Why are you even here?';
+      var bigErr = 'Error: Your drink has more ml of alcohol than the ml of the drink? Erm not sure how that works, but maybe check you put the correct numbers in.'
+
+      //preform alculation (calculation)
+      var oneper = drinkml/100;
+      var mlalc = oneper*alcper;
+      var result = mlalc/price;
+
+      //display Result
+      document.getElementById('result').innerHTML = result;
+      $(".result").show();
+
+      //funny error messages
+      //Infinity Error | if result is Infinity display infinty error variable
+      if (result == Infinity) {
+        document.getElementById('error').innerHTML = infErr;
+        console.log("Infinity Error Occured");
+      }
+      //Not A Number Error | if result is NaN display Not a Number error variable
+      if (isNaN(result)) {
+        document.getElementById('error').innerHTML = nanErr;
+        console.log("Not a Number Error Occured");
+      }
+      //0 Error | if result is 0 or less display zero error variable
+      if (result <= 0) {
+        document.getElementById('error').innerHTML = zerErr;
+        console.log("0 Error Occured");
+      }
+      //larger Error | if result is larger than drink then show larger error variable
+      if (result > drinkml) {
+        document.getElementById('error').innerHTML = bigErr;
+        console.log("Larger Error Occured");
+      }
+    }
+  </script>
+<!--------------------------------------------------->
+<!--------------------------------------------------->
+<div class="container-full">
+    <div class="container">
+      <div class="welcome">
+        <h1>Alculator</h1>
+        <h3>For when you need to get f**ked up on a budget.</h3>
+        <br>
+        <p>Enter your drink details below...</p>
+      </div>
+      <div class="user-input">
+        <form>
+          <div class="input-template">
+            <div class="input-1">
+              <p>Drink Size (ml)</p>
+              <input id="drinkml" type="number">
+            </div>
+            <div class="input-1">
+              <p>Amount of Alcohol (%)</p>
+              <input id="alcper" type="number">
+            </div>
+            <div class="input-1">
+              <p>Drink Price (£)</p>
+              <input id="price" type="number">
+            </div>
+          </div>
+              <button class="alculate" type="button" onclick="alculate()">Alculate!</button>
+        </form>
+      </div>
+    </div>
+    <div class="result">
+      <div>
+        <h3 class="inline-text">Result: Your drink contains</h3><h2 class="inline-text" id="result"></h2><h3 class="inline-text">ml of alcohol per £1</h3>
+          <b><p id="error"></p></b>
+        <button class="result-close" type="button">Return</button>
+      </div>
+    </div>
+</div>
+</body>
+</html>

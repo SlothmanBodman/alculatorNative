@@ -1,0 +1,7 @@
+{
+  "name": "alculator",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
